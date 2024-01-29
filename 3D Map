@@ -1,0 +1,107 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://localhost:8085/3d/libs/Cesium-1.112/Build/Cesium/Cesium.js"></script>
+    <script src="./poi.geojson"></script>
+  <script src="./directions.geojson"></script>
+    <title>Cesium Globe</title>
+  </head>
+  <style>
+      @import url(http://localhost:8085/3d/libs/Cesium-1.112/Apps/Sandcastle/CesiumSandcastle.css);
+
+      @import url(http://localhost:8085/3d/libs/Cesium-1.112/Apps/Sandcastle/templates/bucket.css);
+  </style>
+  <body>
+    <div id="cesiumContainer"></div>
+    <script>
+    // Cesium container with widget controls
+    var viewer = new Cesium.Viewer('cesiumContainer',{
+                    geocoder: true,
+                    animation: false,
+                    timeline: false,
+                    fullscreenButton: false,
+                    baseLayerPicker: false,
+                    credit: false,
+                    navigationHelpButton: false,
+                    toolbar: false,
+                    homeButton: true,
+                    logoContainer: false,
+                    sceneModePicker: true
+  });
+
+  viewer.cesiumWidget.creditContainer.style.display = 'none';                
+  viewer.scene.imageryLayers.removeAll();
+
+// Default home Location to India
+  viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (commandInfo) {
+    // Set the camera to a specific location and orientation
+    viewer.camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(
+            // Specify the desired longitude, latitude, and height
+            78.9629, 20.5937, 20000000.0
+        ),
+       
+    });
+
+    // Cancel the default behavior of the Home button
+    commandInfo.cancel = true;
+});
+
+  // Geojson Data sources 
+  const geoJsonDataSource = Cesium.GeoJsonDataSource.load(
+      './poi.geojson', // Replace with the correct path to your GeoJSON file
+      {
+        
+    stroke: Cesium.Color.HOTPINK,
+    fill: Cesium.Color.PINK,
+    strokeWidth: 3,
+    markerColor: Cesium.Color.RED,
+    markerSymbol: '+'
+  }
+  );
+
+  viewer.dataSources.add(geoJsonDataSource);
+
+
+  const geoJsonDataSource1 = Cesium.GeoJsonDataSource.load(
+      './directions.geojson', // Replace with the correct path to your GeoJSON file
+    {
+      stroke: Cesium.Color.BLUE,
+        
+      markerColor: Cesium.Color.BLUE,
+     
+          
+    }
+  );
+  viewer.dataSources.add(geoJsonDataSource1)
+
+  // OSM Map
+    var imageryLayers = viewer.imageryLayers;
+  imageryLayers.addImageryProvider(
+      new Cesium.UrlTemplateImageryProvider({
+        url: 'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=YpbfcFHDU2Hd2zfILqy7',
+        
+      }));
+
+    
+
+  // Camera controls
+      viewer.scene.screenSpaceCameraController.enableTilt = false;
+      viewer.scene.screenSpaceCameraController.maximumZoomDistance = 20000000;
+      
+  // Camera view
+      viewer.camera.setView({
+      destination: Cesium.Rectangle.fromDegrees(
+          78.227,
+          17.260,
+          78.699,
+          17.577
+      ),
+  });
+    
+
+    </script>
+  </body>
+  </html>
