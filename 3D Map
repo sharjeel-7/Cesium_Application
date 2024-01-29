@@ -81,7 +81,7 @@
     var imageryLayers = viewer.imageryLayers;
   imageryLayers.addImageryProvider(
       new Cesium.UrlTemplateImageryProvider({
-        url: 'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=YpbfcFHDU2Hd2zfILqy7',
+        url: 'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=YOUR_OWN_API_KEY',
         
       }));
 
